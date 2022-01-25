@@ -1,0 +1,37 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+#:import colors kivymd.color_definitions.colors
+#:import effect kivy.uix.effectwidget.EffectWidget
+#:import HorizontalBlurEffect kivy.uix.effectwidget.HorizontalBlurEffect
+#:import VerticalBlurEffect kivy.uix.effectwidget.VerticalBlurEffect
+
+
+<CallScreen>
+
+    EffectWidget:
+        effects:
+            # blur_value значение степени размытия.
+            (\
+            HorizontalBlurEffect(size=root.blur_value), \
+            VerticalBlurEffect(size=root.blur_value), \
+            )
+
+
+    FitImage:
+        id: title_image  # id для обращения к данному виджету
+        size_hint_y: .45  # высота изображения (45% от высоты экрана)
+        # Идентификатор root всегда ссылается на базовый класс.
+        # В нашем случае это <class 'uix.screens.baseclass.callscreen.CallScreen'>,
+        # а self - объект самого виджета - <kivymd.utils.fitimage.FitImage object>.
+        y: root.height - self.height  # положение по оси Y
+        source: "data/images/avatar.jpg"  # путь к изображению
+
+    
+    MDFloatingActionButton:
+        icon: "phone"
+        y: root.height * 45 / 100 + self.height / 2
+        x: root.width - self.width - dp(20)
+        md_bg_color: get_color_from_hex(colors["Green"]["A700"])
+        on_release:
+            root.animation_blur_value(); \
+            root.animation_title_image(title_image); \
+            root.open_call_box = True if not root.open_call_box else False
