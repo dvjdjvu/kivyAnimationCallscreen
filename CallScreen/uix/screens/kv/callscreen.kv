@@ -15,6 +15,67 @@
     IconLeftWidget:
         icon: root.icon
 
+<CallBox@MDGridLayout>
+    cols: 3
+    rows: 2
+    adaptive_size: True
+    spacing: "24dp"
+
+    CallBoxButton:
+        icon: "microphone-off"
+        text: "Mute"
+    CallBoxButton:
+        icon: "volume-high"
+        text: "Speaker"
+    CallBoxButton:
+        icon: "dialpad"
+        text: "Keypad"
+
+    CallBoxButton:
+        icon: "plus-circle"
+        text: "Add call"
+    CallBoxButton:
+        icon: "call-missed"
+        text: "Transfer"
+    CallBoxButton:
+        icon: "account"
+        text: "Contact"
+
+<CallBoxButton@MDBoxLayout>
+    orientation: "vertical"
+    adaptive_size: True
+    spacing: "8dp"
+    icon: ""
+    text: ""
+
+    MDIconButton:
+        icon: root.icon
+        theme_text_color: "Custom"
+        text_color: 1, 1, 1, 1
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Line:
+                width: 1
+                circle:
+                    (\
+                    self.center_x, \
+                    self.center_y, \
+                    min(self.width, self.height) / 2, \
+                    0, \
+                    360, \
+                    )
+
+    MDLabel:
+        text: root.text
+        size_hint_y: None
+        height: self.texture_size[1]
+        font_style: "Caption"
+        halign: "center"
+        theme_text_color: "Custom"
+        text_color: 1, 1, 1, 1
+
 <CallScreen>
 
     EffectWidget:
@@ -96,6 +157,7 @@
         x: root.width - self.width - dp(20)
         md_bg_color: get_color_from_hex(colors["Green"]["A700"])
         on_release:
+            root.animation_call_box(call_box, user_name); \
             root.animation_round_avatar(round_avatar, user_name); \
             root.animation_user_name(round_avatar, user_name); \
             root.animation_list_box(list_box); \
@@ -103,3 +165,9 @@
             root.animation_blur_value(); \
             root.animation_title_image(title_image); \
             root.open_call_box = True if not root.open_call_box else False
+
+    CallBox:
+        id: call_box
+        pos_hint: {"center_x": .5}
+        y: -self.height
+        opacity: 0

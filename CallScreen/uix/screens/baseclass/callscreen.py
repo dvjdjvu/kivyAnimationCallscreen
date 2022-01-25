@@ -17,6 +17,10 @@ from kivy.core.window import Window
 
 from kivymd.color_definitions import colors
 
+from kivy.metrics import dp
+
+from kivymd.material_resources import STANDARD_INCREMENT
+
 #Читаем и загружаем KV файл
 with open(os.path.join(os.getcwd(), "uix", "screens", "kv", "callscreen.kv"), encoding="utf-8") as KV:
     Builder.load_string(KV.read())
@@ -47,7 +51,7 @@ class CallScreen(MDScreen):
         if not self.open_call_box:
             Animation(
                 x=self.center_x - call_button.width / 2,
-                y=40,
+                y=dp(40),
                 md_bg_color=get_color_from_hex(colors["Red"]["A700"]),
                 d=0.6,
                 t="in_out_quad",
@@ -55,7 +59,7 @@ class CallScreen(MDScreen):
         else:
             Animation(
                 y=self.height * 45 / 100 + call_button.height / 2,
-                x=self.width - call_button.width - 20,
+                x=self.width - call_button.width - dp(20),
                 md_bg_color=get_color_from_hex(colors["Green"]["A700"]),
                 d=0.6,
                 t="in_out_quad",
@@ -81,13 +85,13 @@ class CallScreen(MDScreen):
         if not self.open_call_box:
             Animation(
                 x=self.center_x - round_avatar.width / 2,
-                y=round_avatar.y + 50,
+                y=round_avatar.y + dp(50),
                 d=0.6,
                 t="in_out_quad",
             ).start(round_avatar)
         else:
             Animation(
-                x=self.center_x - (round_avatar.width + user_name.width + 20) / 2,
+                x=self.center_x - (round_avatar.width + user_name.width + (20)) / 2,
                 y=self.height * 45 / 100 + round_avatar.height,
                 d=0.6,
                 t="in_out_quad",
@@ -97,14 +101,30 @@ class CallScreen(MDScreen):
         if not self.open_call_box:
             Animation(
                 x=self.center_x - user_name.width / 2,
-                y=user_name.y,
+                y=user_name.y - STANDARD_INCREMENT,
                 d=0.6,
                 t="in_out_quad",
             ).start(self.ids.user_name)
         else:
             Animation(
-                x=round_avatar.x,
-                y=round_avatar.center_y - user_name.height - 20,
+                x=round_avatar.x + STANDARD_INCREMENT,
+                y=round_avatar.center_y - user_name.height - dp(20),
                 d=0.6,
                 t="in_out_quad",
             ).start(user_name)
+
+    def animation_call_box(self, call_box, user_name):
+        if not self.open_call_box:
+            Animation(
+                y=user_name.y - call_box.height - dp(100),
+                opacity=1,
+                d=0.6,
+                t="in_out_quad",
+            ).start(call_box)
+        else:
+            Animation(
+                y=-call_box.height,
+                opacity=0,
+                d=0.6,
+                t="in_out_quad",
+            ).start(call_box)
