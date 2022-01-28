@@ -1,7 +1,4 @@
-from gettext import dpgettext
-import imp
 import os
-from turtle import title
 import kivy
 
 from kivy.lang import Builder
